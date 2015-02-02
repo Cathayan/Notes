@@ -1,0 +1,19 @@
+﻿[Linking vs. loading]
+
+Linkers and loaders perform several related but conceptually separate actions:
+
+• Program loading: Copy a program from secondary storage (which since about 1968 invariably means a disk) into main memory so it’s ready to run. In some cases loading just involves copying the data from disk to memory, in others it involves allocating storage, setting protection bits, or arranging for virtual memory to map virtual addresses to disk pages.
+
+• Relocation: Compilers and assemblers generally create each file of object code with the program addresses starting at zero, but few computers let you load your program at location zero. If a program is created from multiple subprograms, all the subprograms have to be loaded at non-overlapping addresses. Relocation is the process of assigning load addresses to the various parts of the program, adjusting the code and data in the program to reflect the assigned
+addresses. In many systems, relocation happens more than once. It’s quite common for a linker to create a program from multiple subprograms, and create one linked output program that starts at zero, with the various subprograms relocated to locations within the big program. Then when the program is loaded, the system picks the actual load address and the linked program is relocated as a whole to the load address.
+
+• Symbol resolution: When a program is built from multiple subprograms, the references from one subprogram to another are made using symbols; a main program might use a square root routine called sqrt, and the math library defines sqrt. A linker resolves the symbol by noting the location assigned to sqrt in the library, and patching the caller’s object code to so the call instruction refers to that location.
+
+
+[Two-pass linking]
+
+When a linker runs, it first has to scan the input files to find the sizes of the segments and to collect the definitions and references of all of the symbols. It creates a segment table listing all of the segments defined in the input files, and a symbol table with all of the symbols imported or exported.
+
+Using the data from the first pass, the linker assigns numeric locations to symbols, determines the sizes and location of the segments in the output address space, and figures out where everything goes in the output file.
+
+The second pass uses the information collected in the first pass to control the actual linking process. It reads and relocates the object code, substituting numeric addresses for symbol references, and adjusting memory addresses in code and data to reflect relocated segment addresses, and writes the relocated code to the output file. It then writes the output file, generally with header information, the relocated segments, and symbol table information. If the program uses dynamic linking, the symbol table contains the info the runtime linker will need to resolve dynamic symbols. In many cases, the linker itself will generate small amounts of code or data in the output file, such as "glue code" used to call routines in overlays or dynamically linked libraries, or an array of pointers to initialization routines that need to be called at program startup time.
