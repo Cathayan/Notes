@@ -1,3 +1,8 @@
+[Application Binary Interfaces]
+
+In many cases, the linker has to do a significant part of the work involved in complying with the ABI. For example, if the ABI requires that each program contains a table of all of the addresses of static data used by routines in the program, the linker often creates that table, by collecting address information from all of the modules linked into the program. The aspect of the ABI that most often affects the linker is the definition of a standard procedure call.
+
+
 [Procedure calls]
 
 Within a procedure, data addressing falls into four categories: 
