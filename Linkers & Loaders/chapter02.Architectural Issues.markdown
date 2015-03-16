@@ -14,77 +14,148 @@ Within a procedure, data addressing falls into four categories:
 
 
 ```c
-/**
- * map.c
- */
-#include <stdio.h>
-#include <stdlib.h>
-#include <sys/types.h>
-#include <unistd.h>
-
-#define NSIZE   (5*(1<<20))
-#define SLEEPT  10
-
-long  gx[NSIZE];
-
-const long c_gx = 1;
-
-
-void callee_func()
-{
-  char  cc[NSIZE];
-
-  for (int i=0; i<NSIZE; i++) {
-    cc[i]  = 'c';
-  }
-
-  printf ("address of callee stack cc = %012p\n", &cc[0]);
-  printf ("memory map file: /proc/%d/maps\n", getpid());
-  printf ("sleeping %d...", SLEEPT);
-  fflush (NULL);
-  sleep (SLEEPT);
-
-}
-int main (int argc, char *argv[])
-{
-  char c1st = 'a';
-  int  *px = malloc (NSIZE*sizeof(int));
-  char* str = "this is a str";
-
-  printf ("address of r/w data gx[0] = %012p\n", &gx[0]);
-  printf ("address of r-only data c_gx = %012p\n", &c_gx);
-  printf ("address of r-only string = %012p\n", str);
-  printf ("address of heap px[0] = %012p\n", &px[0]);
-  printf ("memory map file: /proc/%d/maps\n", getpid());
-  printf ("sleeping %d...", SLEEPT);
-  fflush (NULL);
-  sleep (SLEEPT);
-  char  c[NSIZE];
-
-  for (int i=0; i<NSIZE; i++) {
-    gx[i] = (long)i;
-    px[i] = i;
-    c[i]  = 'c';
-  }
-  char c2nd = 'a';
-  printf ("address of  stack argv[0] = %012p\n", argv[0]);
-  printf ("address of  stack c1st = %012p\n", &c1st);
-  printf ("address of  stack c[0] = %012p\n", &c[0]);
-  printf ("address of  stack c2nd = %012p\n", &c2nd);
-
-  printf ("memory map file: /proc/%d/maps\n", getpid());
-  printf ("sleeping %d...", SLEEPT);
-  fflush (NULL);
-  sleep (SLEEPT);
-
-  callee_func();
-
-  free (px);
-
-  printf ("\ndone\n");
-  exit (EXIT_SUCCESS);
-}
-```
+/**
+
+ * map.c
+
+ */
+
+#include <stdio.h>
+
+#include <stdlib.h>
+
+#include <sys/types.h>
+
+#include <unistd.h>
+
+
+
+#define NSIZE   (5*(1<<20))
+
+#define SLEEPT  10
+
+
+
+long  gx[NSIZE];
+
+
+
+const long c_gx = 1;
+
+
+
+
+
+void callee_func()
+
+{
+
+  char  cc[NSIZE];
+
+
+
+  for (int i=0; i<NSIZE; i++) {
+
+    cc[i]  = 'c';
+
+  }
+
+
+
+  printf ("address of callee stack cc = %012p\n", &cc[0]);
+
+  printf ("memory map file: /proc/%d/maps\n", getpid());
+
+  printf ("sleeping %d...", SLEEPT);
+
+  fflush (NULL);
+
+  sleep (SLEEPT);
+
+
+
+}
+
+
+int main (int argc, char *argv[])
+
+{
+
+  char c1st = 'a';
+
+  int  *px = malloc (NSIZE*sizeof(int));
+
+  char* str = "this is a str";
+
+
+
+  printf ("address of r/w data gx[0] = %012p\n", &gx[0]);
+
+  printf ("address of r-only data c_gx = %012p\n", &c_gx);
+
+  printf ("address of r-only string = %012p\n", str);
+
+  printf ("address of heap px[0] = %012p\n", &px[0]);
+
+  printf ("memory map file: /proc/%d/maps\n", getpid());
+
+  printf ("sleeping %d...", SLEEPT);
+
+  fflush (NULL);
+
+  sleep (SLEEPT);
+
+  char  c[NSIZE];
+
+
+
+  for (int i=0; i<NSIZE; i++) {
+
+    gx[i] = (long)i;
+
+    px[i] = i;
+
+    c[i]  = 'c';
+
+  }
+
+  char c2nd = 'a';
+
+
+  printf ("address of  stack argv[0] = %012p\n", argv[0]);
+
+  printf ("address of  stack c1st = %012p\n", &c1st);
+
+  printf ("address of  stack c[0] = %012p\n", &c[0]);
+
+  printf ("address of  stack c2nd = %012p\n", &c2nd);
+
+
+
+  printf ("memory map file: /proc/%d/maps\n", getpid());
+
+  printf ("sleeping %d...", SLEEPT);
+
+  fflush (NULL);
+
+  sleep (SLEEPT);
+
+
+
+  callee_func();
+
+
+
+  free (px);
+
+
+
+  printf ("\ndone\n");
+
+  exit (EXIT_SUCCESS);
+
+}
+
 /////////
 address of r/w data gx[0] = 0x0008049b60
 address of r-only data c_gx = 0x0008048820
