@@ -30,6 +30,18 @@ Virtual memory comes at a cost, though. Individual instructions execute in a fra
 If pages can be marked as read-only, performace also improves. Read-only pages don’t need to be paged out since they can be reloaded from wherever they came from originally. If identical pages logically appear in multiple address spaces, which often happens when multiple copies of the same program are running, a single physical page suffices for all of the address spaces.
 
 
+[Mapped files]
+
+Virtual memory systems move data back and forth between real memory and disk, paging data to disk when it doesn’t fit in real memory. Originally, paging all went to ‘‘anonymous’’ disk space separate from the named files in the file system. Soon after the invention of paging, though, designers noticed that it was possible to unify the paging system and the file system by using the paging system to read and write named disk files. When a program maps a file to a part of the program’s address space, the operating system marks all of the pages in that part of the address space not present, and uses the file as the paging disk for that part of the address space, as in Figure 8. The program can read the file merely by referencing that part of the address space, at which point the paging system loads the necessary pages from disk.
+
+![alt text](https://github.com/Cathayan/Notes/blob/master/Linkers%20%26%20Loaders/chapter02.mapping_a_file.png "Mapping A File")
+
+There are three different approaches to handling writes to mapped files. The simplest is to map a file read-only (RO), so that any attempts to store into the mapped region fail, usually causing the program to abort. The second is to map the file read-write (RW), so that changes to the memory copy of the file are paged back to the disk by the time the file is unmapped. The third is to map the file copy-on-write (COW, not the most felicitous acronym). This maps the page read-only until the program attempts to store into the page. At that time, the operating system makes a copy of the page which is then treated as a private page not mapped from a file. From the program¡¯s point of view, mapping a file COW is very similar to allocating a fresh area of anonymous memory and reading the file's contents into that area, since changes the program makes are visible to that program but not to any other program that might have mapped the same file.
+
+
+
+
+[Demo Code]
 
 ```c
 /**
