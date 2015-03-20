@@ -20,12 +20,14 @@ Within a procedure, data addressing falls into four categories:
 
 On most modern computers, each program can potentially address a vast amount of memory, four gigabytes on a typical 32 bit machine. Few computers actually have that much memory, and even the ones that do need to share it among multiple programs. Paging hardware divides a program’s address space into fixed size pages, typically 2K or 4K bytes in size, and divides the physical memory of the computer into page frames of the same size. The hardware conatins page tables with an entry for each page in the address space, as shown below:
 
-![alt text](https://github.com/adam-p/markdown-here/raw/master/src/common/images/icon48.png "Logo Title Text 1")
+![alt text](https://github.com/Cathayan/Notes/blob/master/Linkers%20%26%20Loaders/chapter02.page_mapping.png "Page Mapping")
 
 
+A page table entry can contain the real memory page frame for the page, or flag bits to mark the page ‘‘not present.’’ When an application program attempts to use a page that is not present, hardware generates a page fault which is handled by the operating system. The operating system can load a copy of the contents page from disk into a free page frame, then let the application continue. By moving pages back and forth between main memory and disk as needed, the operating system can provide virtual memory which appears to the application to be far larger than the real memory in use.
 
+Virtual memory comes at a cost, though. Individual instructions execute in a fraction of a microsecond, but a page fault and consequent page in or page out (transfer from disk to main memory or vice versa) takes several milliseconds since it requires a disk transfer. The more page faults a program generates, the slower it runs, with the worst case being thrashing, all page faults with no useful work getting done. The fewer pages a program needs, the fewer page faults it will generate. If the linker can pack related routines into a single page or a small group of pages, paging performance improves.
 
-
+If pages can be marked as read-only, performace also improves. Read-only pages don’t need to be paged out since they can be reloaded from wherever they came from originally. If identical pages logically appear in multiple address spaces, which often happens when multiple copies of the same program are running, a single physical page suffices for all of the address spaces.
 
 
 
