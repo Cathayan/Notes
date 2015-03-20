@@ -16,6 +16,14 @@ Within a procedure, data addressing falls into four categories:
 • Global static data is stored in a fixed location in memory and can be referenced from many different procedures. 
 
 
+[Paging and Virtual Memory]
+
+On most modern computers, each program can potentially address a vast amount of memory, four gigabytes on a typical 32 bit machine. Few computers actually have that much memory, and even the ones that do need to share it among multiple programs. Paging hardware divides a program’s address space into fixed size pages, typically 2K or 4K bytes in size, and divides the physical memory of the computer into page frames of the same size. The hardware conatins page tables with an entry for each page in the address space, as shown in Figure 7.
+
+
+
+
+
 
 
 ```c
